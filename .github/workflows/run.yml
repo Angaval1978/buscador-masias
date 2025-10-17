@@ -9,11 +9,11 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      # Descargar el repositorio en la raíz del runner
+      # Descargar el repositorio directamente en la raíz del runner
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          path: .   # Clona el repo directamente en la raíz del runner
+          path: .
 
       # Instalar Python
       - name: Setup Python
@@ -32,6 +32,5 @@ jobs:
           echo "${{ secrets.GSA_JSON }}" > gsa_json.json
 
       # Ejecutar scraper
-    - name: Ejecutar scraper
-  run: python ./buscador-masias/scraper.py
-
+      - name: Ejecutar scraper
+        run: python scraper.py
