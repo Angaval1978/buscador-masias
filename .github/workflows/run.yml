@@ -1,32 +1,34 @@
 name: Ejecutar buscador de masías
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * *"   # Todos los días a las 9:00 hora España
+  workflow_dispatch:      # Permite ejecución manual
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
+      # Descargar el repositorio
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Instalar Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: Mostrar ruta actual
-        run: pwd && ls -la
-
+      # Instalar dependencias
       - name: Instalar dependencias
         run: |
-          pip install -r requirements.txt
+          pip install -r $GITHUB_WORKSPACE/requirements.txt
 
+      # Crear archivo JSON desde secret
       - name: Crear archivo JSON
         run: |
-          echo "${{ secrets.GSA_JSON }}" > gsa_json.json
+          echo "${{ secrets.GSA_JSON }}" > $GITHUB_WORKSPACE/gsa_json.json
 
+      # Ejecutar scraper
       - name: Ejecutar scraper
-        working-directory: ./buscador-masias
-        run: python scraper.py
-
+        run: python $GITHUB_WORKSPACE/scraper.py
