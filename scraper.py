@@ -1,18 +1,16 @@
+import json
 import gspread
 from google.oauth2.service_account import Credentials
 
-print("🚀 Iniciando scraper de prueba...")
+# Leer JSON de forma segura
+with open('gsa_json.json') as f:
+    gsa_creds = json.load(f)
 
-creds = Credentials.from_service_account_info(
-    eval(open('gsa_json.json').read()),
-    scopes=["https://www.googleapis.com/auth/spreadsheets"]
-)
-
+creds = Credentials.from_service_account_info(gsa_creds)
 gc = gspread.authorize(creds)
 
-SHEET_URL = "https://docs.google.com/spreadsheets/d/XXXXXXXXXXXX/edit"  # <--- tu hoja
-sh = gc.open_by_url(SHEET_URL)
-worksheet = sh.worksheet("results")
+# Abrir Google Sheet
+sheet = gc.open("MiHojaDePrueba").sheet1
 
-worksheet.append_row(["🏡 Test automático", "https://ejemplo.com", "500000", "6", "6", "Olot", "GitHub"])
-print("✅ Fila añadida correctamente desde GitHub Actions")
+# Añadir fila de prueba
+sheet.append_row(["🚀 Iniciando scraper de prueba..."])
